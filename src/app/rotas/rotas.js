@@ -32,8 +32,17 @@ module.exports = (app) => {
 
     app.get('/livros/busca/*', function (req, resp) {
         const livroDao = new LivroDao(db);
-        livroDao.buscaId(req.params[0])
+        const idLivro = req.params[0];
+        livroDao.buscaId(idLivro)
             .then((livro) => resp.send(livro))
+            .catch((erro) => console.log(erro));
+    })
+
+    app.get('/livros/atualiza/gratis/*', function (req, resp) {
+        const livroDao = new LivroDao(db);
+        const idLivro = req.params[0];
+        livroDao.atualiza(idLivro)
+            .then(resp.send('Livro atualizado com sucesso'))
             .catch((erro) => console.log(erro));
     })
 

@@ -16,12 +16,13 @@ class ListaDao {
 
     adiciona(livro) {
         return new Promise((resolve, reject) => {
-            this._db.run(`
-                INSERT INTO livros (
-                    titulo,
-                    preco, 
-                    descricao
-                ) values (?,?,?)
+            this._db.run(
+                `
+                    INSERT INTO livros (
+                        titulo,
+                        preco, 
+                        descricao
+                    ) values (?,?,?)
                 `,
                 [
                     livro.titulo,
@@ -42,7 +43,12 @@ class ListaDao {
 
     buscaId(id) {
         return new Promise((resolve, reject) =>
-            this._db.all(`SELECT * FROM livros WHERE id = '${id}'`, 
+            this._db.get(
+                `
+                    SELECT * 
+                    FROM livros 
+                    WHERE id = '${id}'
+                `, 
                 function (erro, livro) {
                     if (erro) return reject(erro);
                     resolve(livro);
@@ -51,9 +57,29 @@ class ListaDao {
         );
     }
 
+    atualiza(id) {
+        return new Promise((resolve, reject) => {
+            this._db.run(
+                `
+                    UPDATE livros SET 
+                    preco = 'Grátisss' 
+                    WHERE id = '${id}'
+                `, 
+                function (erro, livro) {
+                    if (erro) return reject(erro);
+                    resolve();
+                }
+            )
+        });
+    }
+
     remove(id) {
         return new Promise((resolve, reject) =>
-            this._db.all(`DELETE FROM livros WHERE id = '${id}'`, 
+            this._db.get(
+                `
+                    DELETE FROM livros 
+                    WHERE id = '${id}'
+                `, 
                 function (erro, result) {
                     if (erro) return reject(erro);
                     resolve();
