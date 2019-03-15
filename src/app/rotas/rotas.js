@@ -11,9 +11,7 @@ module.exports = (app) => {
     });
 
     app.get('/livros', function (req, resp) {
-
         const livroDao = new LivroDao(db);
-
         livroDao.list()
             .then((livros) => {
                 resp.marko(require('../views/livros/lista/lista.marko'), {livros});
@@ -27,11 +25,17 @@ module.exports = (app) => {
 
     app.post('/livros', function(req, resp) {
         const livroDao = new LivroDao(db);
-
         livroDao.adiciona(req.body)
             .then(resp.redirect('/livros'))
             .catch((erro) => console.log(erro));
     });
+
+    app.get('/livros/busca/*', function (req, resp) {
+        const livroDao = new LivroDao(db);
+        livroDao.buscaId(req.params[0])
+            .then((livro) => resp.send(livro))
+            .catch((erro) => console.log(erro));
+    })
 
     app.get('/*', function (req, resp) {
         resp.status(404).send(`Sorry, can't get that`);

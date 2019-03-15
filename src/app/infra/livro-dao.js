@@ -40,6 +40,17 @@ class ListaDao {
         });
     }
 
+    buscaId(id) {
+        return new Promise((resolve, reject) =>
+            this._db.all(`SELECT * FROM livros WHERE id = '${id}'`, 
+                function (erro, livro) {
+                    if (erro) return reject(erro);
+                    resolve(livro);
+                }
+            )
+        );
+    }
+
 }
 
 module.exports = ListaDao;
