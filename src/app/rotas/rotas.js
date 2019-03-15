@@ -10,15 +10,11 @@ module.exports = (app) => {
 
         const livroDao = new LivroDao(db);
 
-        livroDao.list((erro, resultados) => { // callback que será executado quando completar a busca no banco
-
-            resp.marko(
-                require('../views/livros/lista/lista.marko'),
-                {
-                    livros: resultados
-                }
-            );
-        });
+        livroDao.list()
+            .then((result) => {
+                resp.marko(require('../views/livros/lista/lista.marko'), {livros: result});
+            })
+            .catch((erro) => console.log(erro));
     });
 
     app.get('/*', function (req, resp) {
