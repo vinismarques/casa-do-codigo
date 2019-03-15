@@ -51,6 +51,17 @@ class ListaDao {
         );
     }
 
+    remove(id) {
+        return new Promise((resolve, reject) =>
+            this._db.all(`DELETE FROM livros WHERE id = '${id}'`, 
+                function (erro, result) {
+                    if (erro) return reject(erro);
+                    resolve();
+                }
+            )
+        );
+    }
+
 }
 
 module.exports = ListaDao;

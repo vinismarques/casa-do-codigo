@@ -37,6 +37,16 @@ module.exports = (app) => {
             .catch((erro) => console.log(erro));
     })
 
+    app.get('/livros/remove/*', function (req, resp) {
+        const livroDao = new LivroDao(db);
+        const idLivro = req.params[0];
+        livroDao.remove(idLivro)
+            .then((livro) => resp.send(`
+                Livro ${idLivro} foi removido com sucesso
+            `))
+            .catch((erro) => console.log(erro));
+    })
+
     app.get('/*', function (req, resp) {
         resp.status(404).send(`Sorry, can't get that`);
     });
