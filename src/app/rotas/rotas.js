@@ -11,8 +11,8 @@ module.exports = (app) => {
         const livroDao = new LivroDao(db);
 
         livroDao.list()
-            .then((result) => {
-                resp.marko(require('../views/livros/lista/lista.marko'), {livros: result});
+            .then((livros) => {
+                resp.marko(require('../views/livros/lista/lista.marko'), {livros});
             })
             .catch((erro) => console.log(erro));
     });
