@@ -21,8 +21,19 @@ module.exports = (app) => {
             .catch((erro) => console.log(erro));
     });
 
+    app.get('/livros/form', function (req, resp) {
+        resp.marko(require('../views/livros/form/form.marko'));
+    });
+
+    app.post('/livros', function(req, resp) {
+        const livroDao = new LivroDao(db);
+
+        livroDao.adiciona(req.body)
+            .then(resp.redirect('/livros'))
+            .catch((erro) => console.log(erro));
+    });
+
     app.get('/*', function (req, resp) {
         resp.status(404).send(`Sorry, can't get that`);
     });
-
 };
