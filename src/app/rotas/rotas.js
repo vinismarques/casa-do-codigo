@@ -1,7 +1,11 @@
 const db = require('../../config/database');
 const LivroDao = require('../infra/livro-dao');
 
-module.exports = (app) => {
+/**
+ * Exporta a função responsável pelas rotas. O parâmetro app que a função recebe é a aplicação Express.
+ * O custom-express.js instancia o rotas.js e passa a aplicação Express como parâmetro. 
+ */
+module.exports = (app) => { 
     app.get('/', function (req, resp) {
         resp.send(`Bem vindo à Casa do Código!`);
     });
