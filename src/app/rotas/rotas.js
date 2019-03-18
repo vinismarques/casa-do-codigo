@@ -19,8 +19,8 @@ module.exports = (app) => {
             .catch((erro) => console.log(erro));
     });
 
-    app.get('/livros/form', function (req, resp) {
-        resp.marko(require('../views/livros/form/form.marko'));
+    app.get('/livros/form', function(req, resp) {
+        resp.marko(require('../views/livros/form/form.marko'), { livro: {} });
     });
 
     app.post('/livros', function(req, resp) {
@@ -30,31 +30,37 @@ module.exports = (app) => {
             .catch((erro) => console.log(erro));
     });
 
-    app.get('/livros/busca/*', function (req, resp) {
+    app.get('/livros/form/:id', function(req, resp) {
+        const id = req.params.id;
         const livroDao = new LivroDao(db);
-        const idLivro = req.params[0];
-        livroDao.buscaId(idLivro)
-            .then((livro) => resp.send(livro))
-            .catch((erro) => console.log(erro));
-    })
+    
+        livroDao.buscaId(id)
+            .then(livro => 
+                resp.marko(
+                    require('../views/livros/form/form.marko'),
+                    { livro: livro }
+                )
+            )
+            .catch(erro => console.log(erro));
+    });
 
-    app.get('/livros/atualiza/gratis/*', function (req, resp) {
+    app.put('/livros', function (req, resp) {
         const livroDao = new LivroDao(db);
-        const idLivro = req.params[0];
-        livroDao.atualiza(idLivro)
-            .then(resp.send('Livro atualizado com sucesso'))
-            .catch((erro) => console.log(erro));
-    })
 
-    app.get('/livros/remove/*', function (req, resp) {
-        const livroDao = new LivroDao(db);
-        const idLivro = req.params[0];
-        livroDao.remove(idLivro)
-            .then((livro) => resp.send(`
-                Livro ${idLivro} foi removido com sucesso
-            `))
+        livroDao.atualiza(req.body)
+            .then(resp.redirect('/livros'))
             .catch((erro) => console.log(erro));
-    })
+    });
+
+    app.delete('/livros/:id', function(req, resp) {
+        const id = req.params.id;
+    
+        const livroDao = new LivroDao(db);
+        livroDao.remove(id)
+            .then(() => resp.status(200).end())
+            .catch(erro => console.log(erro));
+    
+    });
 
     app.get('/*', function (req, resp) {
         resp.status(404).send(`Sorry, can't get that`);

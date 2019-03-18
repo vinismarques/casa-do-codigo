@@ -57,19 +57,28 @@ class ListaDao {
         );
     }
 
-    atualiza(id) {
+    atualiza(livro) {
         return new Promise((resolve, reject) => {
-            this._db.run(
-                `
-                    UPDATE livros SET 
-                    preco = 'Grátisss' 
-                    WHERE id = '${id}'
-                `, 
-                function (erro, livro) {
-                    if (erro) return reject(erro);
-                    resolve();
+            this._db.run(`
+                UPDATE livros SET
+                titulo = ?,
+                preco = ?,
+                descricao = ?
+                WHERE id = ?
+            `,
+            [
+                livro.titulo,
+                livro.preco,
+                livro.descricao,
+                livro.id
+            ],
+            erro => {
+                if (erro) {
+                    return reject('Não foi possível atualizar o livro!');
                 }
-            )
+
+                resolve();
+            });
         });
     }
 
