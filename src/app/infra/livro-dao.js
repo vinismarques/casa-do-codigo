@@ -47,9 +47,10 @@ class ListaDao {
                 `
                     SELECT * 
                     FROM livros 
-                    WHERE id = '${id}'
-                `, 
-                function (erro, livro) {
+                    WHERE id = ?
+                `,
+                [id], 
+                (erro, livro)  => {
                     if (erro) return reject(erro);
                     resolve(livro);
                 }
@@ -73,10 +74,7 @@ class ListaDao {
                 livro.id
             ],
             erro => {
-                if (erro) {
-                    return reject('Não foi possível atualizar o livro!');
-                }
-
+                if (erro) return reject('Não foi possível atualizar o livro!');
                 resolve();
             });
         });
@@ -87,11 +85,12 @@ class ListaDao {
             this._db.get(
                 `
                     DELETE FROM livros 
-                    WHERE id = '${id}'
-                `, 
-                function (erro, result) {
-                    if (erro) return reject(erro);
-                    resolve();
+                    WHERE id = ?
+                `,
+                [id],
+                erro => {
+                    if (erro) return reject('Não foi possível remover o livro!');
+                    return resolve();
                 }
             )
         );
